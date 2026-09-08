@@ -264,6 +264,8 @@ p { color: var(--ink-soft); }
   gap: 5px;
   width: 32px;
   height: 32px;
+  position: relative;
+  z-index: 101;
 }
 .nav-toggle span {
   display: block;
@@ -273,6 +275,19 @@ p { color: var(--ink-soft); }
   transition: background-color 0.2s var(--ease), transform 0.25s var(--ease), opacity 0.2s var(--ease);
 }
 .site-header:not(.is-scrolled) .nav-toggle span { background: var(--white); }
+
+/* When the mobile menu is open, animate the three bars into an X so it's
+   visually obvious the same button now closes the menu. */
+.nav-toggle.is-active span:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+}
+.nav-toggle.is-active span:nth-child(2) { opacity: 0; }
+.nav-toggle.is-active span:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+/* Once the dark full-screen panel is open, the bars should always read as
+   dark ink against the panel's light background, regardless of header state. */
+.nav-toggle.is-active span { background: var(--ink) !important; }
 
 .mobile-nav {
   position: fixed;
@@ -288,6 +303,24 @@ p { color: var(--ink-soft); }
   z-index: 99;
 }
 .mobile-nav.is-open { transform: translateY(0); }
+
+.mobile-nav-close {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* Belt-and-suspenders: no matter what state gets toggled via JS, the
+   full-screen mobile panel must never be able to render at desktop widths. */
+@media (min-width: 901px) {
+  .mobile-nav { display: none !important; }
+}
+
 .mobile-nav ul {
   display: flex;
   flex-direction: column;
@@ -310,7 +343,6 @@ p { color: var(--ink-soft); }
   height: 100vh;
   height: 100svh; /* accounts for mobile browser chrome; falls back to vh where unsupported */
   min-height: 560px;
-  max-height: 900px;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -341,24 +373,28 @@ p { color: var(--ink-soft); }
 }
 
 .hero-eyebrow {
-  font-size: 15px;
-  letter-spacing: 0.08em;
+  font-size: 14px;
+  letter-spacing: 0.1em;
   font-weight: 500;
-  color: rgba(255,255,255,0.88);
-  margin-bottom: 10px;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 14px;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.35);
 }
 
 .hero-title {
   font-size: clamp(48px, 8vw, 92px);
   color: var(--white);
-  margin-bottom: 18px;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.3);
 }
 
 .hero-sub {
-  max-width: 520px;
-  font-size: 18px;
+  max-width: 500px;
+  font-size: 17px;
+  line-height: 1.65;
   color: rgba(255,255,255,0.92);
-  margin-bottom: 32px;
+  margin-bottom: 36px;
+  text-shadow: 0 1px 16px rgba(0,0,0,0.3);
 }
 
 .hero-actions {

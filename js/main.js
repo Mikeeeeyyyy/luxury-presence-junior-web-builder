@@ -24,20 +24,37 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- 2. Mobile nav ---------- */
   const navToggle = document.getElementById('nav-toggle');
   const mobileNav = document.getElementById('mobile-nav');
+  const mobileNavClose = document.getElementById('mobile-nav-close');
 
   function closeMobileNav() {
     mobileNav.classList.remove('is-open');
+    navToggle.classList.remove('is-active');
     navToggle.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
   }
 
   function toggleMobileNav() {
     const isOpen = mobileNav.classList.toggle('is-open');
+    navToggle.classList.toggle('is-active', isOpen);
     navToggle.setAttribute('aria-expanded', String(isOpen));
     document.body.style.overflow = isOpen ? 'hidden' : '';
   }
 
   navToggle.addEventListener('click', toggleMobileNav);
+  mobileNavClose.addEventListener('click', closeMobileNav);
+
+  // Close on Escape, and automatically if the window is ever resized past
+  // the mobile breakpoint while the panel happens to be open.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileNav.classList.contains('is-open')) {
+      closeMobileNav();
+    }
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900 && mobileNav.classList.contains('is-open')) {
+      closeMobileNav();
+    }
+  });
 
   // Close the mobile menu whenever a link inside it is used
   mobileNav.querySelectorAll('a').forEach(link => {
