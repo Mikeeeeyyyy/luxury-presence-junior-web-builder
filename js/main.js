@@ -1,17 +1,5 @@
-/**
- * Marci Metzger Homes — site interactions
- *
- * Four small, independent pieces of behavior:
- *   1. Sticky header: swap the transparent-over-hero header for a solid one on scroll.
- *   2. Mobile nav: open/close the full-screen menu panel.
- *   3. Search + contact forms: since this is a static rebuild with no backend/IDX
- *      connection, both forms confirm the submission in-page rather than failing silently.
- *   4. Lightbox: click any gallery photo to view it larger, with keyboard + arrow navigation.
- */
-
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ---------- 1. Sticky header ---------- */
   const header = document.getElementById('site-header');
   const SCROLL_THRESHOLD = 40;
 
@@ -21,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateHeader();
   window.addEventListener('scroll', updateHeader, { passive: true });
 
-  /* ---------- 2. Mobile nav ---------- */
   const navToggle = document.getElementById('nav-toggle');
   const mobileNav = document.getElementById('mobile-nav');
   const mobileNavClose = document.getElementById('mobile-nav-close');
@@ -43,28 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
   navToggle.addEventListener('click', toggleMobileNav);
   mobileNavClose.addEventListener('click', closeMobileNav);
 
-  // Close on Escape, and automatically if the window is ever resized past
-  // the mobile breakpoint while the panel happens to be open.
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && mobileNav.classList.contains('is-open')) {
       closeMobileNav();
     }
   });
+
   window.addEventListener('resize', () => {
     if (window.innerWidth > 900 && mobileNav.classList.contains('is-open')) {
       closeMobileNav();
     }
   });
 
-  // Close the mobile menu whenever a link inside it is used
   mobileNav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', closeMobileNav);
   });
 
-  /* ---------- 3. Forms ---------- */
-  // No backend is wired up in this static build. We prevent the default
-  // navigation-away submit and instead show an inline confirmation, so the
-  // page stays usable and honest about what it can currently do.
   const searchForm = document.getElementById('search-form');
   const searchNote = document.getElementById('search-note');
 
@@ -88,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
     contactForm.reset();
   });
 
-  /* ---------- 4. Lightbox gallery ---------- */
   const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
@@ -141,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowRight') showRelative(1);
   });
 
-  /* ---------- Footer year ---------- */
   document.getElementById('year').textContent = new Date().getFullYear();
 
 });
